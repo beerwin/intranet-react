@@ -15,9 +15,19 @@ function itemList (articles) {
     </ul>)
 }
 
-const articleList = ({articles}) => (
-    itemList(articles)
-)
+class articleList extends React.Component {
+    constructor (props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        this.props.getArticles();
+    }
+
+    render() {
+        return itemList(this.props.articles)
+    }
+}
 
 articleList.propTypes = {
     articles: PropTypes.shape({

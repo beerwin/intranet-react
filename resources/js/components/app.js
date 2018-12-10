@@ -9,7 +9,6 @@ import { createStore, applyMiddleware } from 'redux'
 import { rootReducer } from './reducers/index'
 import AddArticle from '../containers/AddArticle'
 import VisibleArticleList from '../containers/VisibleArticleList';
-import {requestArticlesAjax} from '../actions'
 
 class App extends Component {
     render() {
