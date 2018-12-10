@@ -17,8 +17,12 @@ class App extends Component {
             <BrowserRouter>
                 <div>
                     <Header />
-                    <AddArticle />
-                    <VisibleArticleList />
+
+                    <Switch>
+                        <Route exact path="/articles" component={VisibleArticleList} />
+                        <Route exact path="/articles/add" component={AddArticle} />
+                    </Switch>
+
                     <Footer />
                 </div>
             </BrowserRouter>
