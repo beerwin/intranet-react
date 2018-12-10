@@ -1,13 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Article from './article'
+import Loader from './loader'
 
-const articleList = ({articles}) => (
-    <ul>
+function itemList (articles) {
+    if (articles.isLoading) {
+        return <Loader />
+    }
+
+    return (<ul>
         {articles.data.map(article => (
             <Article key={article.slug} {...article} />
         ))}
-    </ul>
+    </ul>)
+}
+
+const articleList = ({articles}) => (
+    itemList(articles)
 )
 
 articleList.propTypes = {

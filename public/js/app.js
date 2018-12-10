@@ -65495,14 +65495,19 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__article__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loader__ = __webpack_require__(133);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
 
 
 
-var articleList = function articleList(_ref) {
-    var articles = _ref.articles;
+
+function itemList(articles) {
+    if (articles.isLoading) {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__loader__["a" /* default */], null);
+    }
+
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'ul',
         null,
@@ -65510,6 +65515,11 @@ var articleList = function articleList(_ref) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__article__["a" /* default */], _extends({ key: article.slug }, article));
         })
     );
+}
+
+var articleList = function articleList(_ref) {
+    var articles = _ref.articles;
+    return itemList(articles);
 };
 
 articleList.propTypes = {
@@ -65594,6 +65604,25 @@ var thunk = createThunkMiddleware();
 thunk.withExtraArgument = createThunkMiddleware;
 
 /* harmony default export */ __webpack_exports__["a"] = (thunk);
+
+/***/ }),
+/* 133 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+
+
+var Loader = function Loader() {
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        null,
+        'Loading...'
+    );
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Loader);
 
 /***/ })
 /******/ ]);
