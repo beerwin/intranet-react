@@ -4,21 +4,24 @@ import Article from './article'
 
 const articleList = ({articles}) => (
     <ul>
-        {articles.map(article => (
+        {articles.data.map(article => (
             <Article key={article.slug} {...article} />
         ))}
     </ul>
 )
 
 articleList.propTypes = {
-    articles: PropTypes.arrayOf(
-        PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            slug: PropTypes.string.isRequired,
-            content: PropTypes.string.isRequired,
-            category: PropTypes.number.isRequired
-        })
-    )
+    articles: PropTypes.shape({
+        isLoading: PropTypes.boolean,
+        data: PropTypes.arrayOf(
+            PropTypes.shape({
+                name: PropTypes.string.isRequired,
+                slug: PropTypes.string.isRequired,
+                content: PropTypes.string.isRequired,
+                category: PropTypes.number.isRequired
+            })
+        )
+    })
 }
 
 export default articleList

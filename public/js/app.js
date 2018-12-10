@@ -65265,31 +65265,32 @@ var rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["c" /* combineReduc
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var articles = function articles() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { isLoading: false, data: [] };
     var action = arguments[1];
 
     switch (action.type) {
         case 'ADD_ARTICLE':
-            return [].concat(_toConsumableArray(state), [{
+            var data = [].concat(_toConsumableArray(state.data), [{
                 name: action.payLoad.name,
                 slug: action.payLoad.slug,
                 content: action.payLoad.content,
                 category: parseInt(action.payLoad.category)
             }]);
+            return Object.assign({}, state, { data: data });
         case 'INVALIDATE_ARTICLES':
-            return [].concat(_toConsumableArray(state));
+            return state;
         case 'REQUEST_ARTICLES':
-            return [].concat(_toConsumableArray(state));
+            return Object.assign({}, state, { isLoading: true });
         case 'RECEIVE_ARTICLES':
 
-            return [].concat(_toConsumableArray(state), _toConsumableArray(action.payLoad.data.map(function (x) {
-                return {
-                    'name': x.name,
-                    'slug': x.slug,
-                    'content': x.content,
-                    'category': x.category.id
-                };
-            })));
+            return Object.assign({}, state, { isLoading: false, data: action.payLoad.data.map(function (x) {
+                    return {
+                        'name': x.name,
+                        'slug': x.slug,
+                        'content': x.content,
+                        'category': x.category.id
+                    };
+                }) });
         default:
             return state;
     }
@@ -65505,19 +65506,22 @@ var articleList = function articleList(_ref) {
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'ul',
         null,
-        articles.map(function (article) {
+        articles.data.map(function (article) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__article__["a" /* default */], _extends({ key: article.slug }, article));
         })
     );
 };
 
 articleList.propTypes = {
-    articles: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
-        name: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
-        slug: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
-        content: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
-        category: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired
-    }))
+    articles: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+        isLoading: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.boolean,
+        data: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+            name: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
+            slug: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
+            content: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
+            category: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired
+        }))
+    })
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (articleList);
