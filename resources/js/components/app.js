@@ -17,12 +17,14 @@ class App extends Component {
             <BrowserRouter>
                 <div>
                     <Header />
-
-                    <Switch>
-                        <Route exact path="/articles" component={VisibleArticleList} />
-                        <Route exact path="/articles/add" component={AddArticle} />
-                    </Switch>
-
+                    <main className='py-4'>
+                        <div className='container'>
+                            <Switch>
+                                <Route exact path="/articles" component={VisibleArticleList} />
+                                <Route exact path="/articles/add" component={AddArticle} />
+                            </Switch>
+                        </div>
+                    </main>
                     <Footer />
                 </div>
             </BrowserRouter>
@@ -43,5 +45,3 @@ render(
     </Provider>
     , document.getElementById('app')
 )
-
-store.dispatch(requestArticlesAjax());
