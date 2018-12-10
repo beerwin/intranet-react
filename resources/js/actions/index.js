@@ -20,14 +20,13 @@ export const invalidateArticles = () => ({
     payLoad: []
 })
 
-
 export function requestArticlesAjax() {
     return function (dispatch) {
         dispatch(requestArticles());
         axios.get('http://intranet.localhost/api/articles')
             .then(function(response){
                 dispatch(receiveArticles(response))
-                    .then(dispatch(invalidateArticles()))
-            });
+            })
+            .then(dispatch(invalidateArticles()));
     }
 }

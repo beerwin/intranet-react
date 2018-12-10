@@ -65454,8 +65454,8 @@ function requestArticlesAjax() {
     return function (dispatch) {
         dispatch(requestArticles());
         __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('http://intranet.localhost/api/articles').then(function (response) {
-            dispatch(receiveArticles(response)).then(dispatch(invalidateArticles()));
-        });
+            dispatch(receiveArticles(response));
+        }).then(dispatch(invalidateArticles()));
     };
 }
 
