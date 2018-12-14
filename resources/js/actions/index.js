@@ -5,7 +5,7 @@ export const addArticle = article => ({
     payLoad: article
 })
 
-export const requestArticles = () => ({
+export const requestArticles = articles => ({
     type: 'REQUEST_ARTICLES',
     payLoad: []
 })
@@ -16,14 +16,29 @@ export const receiveArticles = json => ({
 })
 
 export const invalidateArticles = () => ({
-    type: 'INVLIDATE_ARTICLES',
+    type: 'INVALIDATE_ARTICLES',
     payLoad: []
 })
 
-export function requestArticlesAjax() {
+export const sortArticles = (column, direction) => ({
+    type: 'SORT_ARTICLES',
+    payLoad: {
+        column: column,
+        direction: direction
+    }
+})
+
+export const setArticlePage = (page) => ({
+    type: 'SET_ARTICLE_PAGE',
+    payLoad: {
+        page: page
+    }
+})
+
+export function requestArticlesAjax(articles) {
     return function (dispatch) {
-        dispatch(requestArticles());
-        axios.get('http://intranet.localhost/api/articles')
+        dispatch(requestArticles(articles));
+        axios.get('http://intranet.localhost/api/articles/'+articles.orderBy+'/'+articles.order+'?page=' + articles.page)
             .then(function(response){
                 dispatch(receiveArticles(response))
             })

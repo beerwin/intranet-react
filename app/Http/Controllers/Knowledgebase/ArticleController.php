@@ -8,8 +8,10 @@ use App\Article;
 
 class ArticleController extends Controller
 {
-    public function index() {
-        return Article::with('Category')->get();
+    public function index($orderBy = 'name', $order = 'asc') {
+        return Article::with( 'Category' )
+            ->orderBy( $orderBy, $order )
+            ->paginate();
     }
 
     public function show(Article $article) {
@@ -17,7 +19,6 @@ class ArticleController extends Controller
     }
 
     public function store(Request $request) {
-//        dd($request);
         $article = Article::create($request->all());
         return response()->json($article->load('Category'), 201);
     }

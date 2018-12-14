@@ -9,6 +9,7 @@ import { createStore, applyMiddleware } from 'redux'
 import { rootReducer } from './reducers/index'
 import AddArticle from '../containers/AddArticle'
 import VisibleArticleList from '../containers/VisibleArticleList';
+import axios from 'axios';
 
 class App extends Component {
     render() {
@@ -30,6 +31,13 @@ class App extends Component {
         )
     }
 }
+
+axios.interceptors.response.use(undefined, function(error){
+    if (error.response.status === 401) {
+        location.href = '/login';
+        return Promise.reject(error);
+    }
+});
 
 const store = createStore(
     rootReducer,
