@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Pagination from '../paginator'
+import Pagination from '../Pagination'
 import ItemList from './ItemList'
 
 
-class articleList extends React.Component {
+class ArticleList extends React.Component {
     constructor (props) {
         super(props);
     }
@@ -48,4 +48,4 @@ articleList.propTypes = {
     })
 }
 
-export default articleList
+export default ArticleList
