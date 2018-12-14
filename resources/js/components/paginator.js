@@ -1,31 +1,13 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {setArticlePage} from '../actions'
-import {requestArticlesAjax} from '../actions'
+import PaginationItem from './PaginationItem'
 
-function PaginationItem(props) {
-    let className = 'page-item'
-
-    if (props.list.page === props.context) {
-        className = className + ' active';
-    }
-
-    return (
-        <li className={className}>
-            <a href="#" className='page-link' onClick={e => {
-                e.preventDefault()
-                props.dispatch(setArticlePage(props.context))
-            }}>{props.content}</a>
-        </li>
-    )
-}
 
 function PaginationPrevious(props) {
     if (props.list.page < 2)
     return '';
 
     return (
-        <PaginationItem context={props.context} content={props.content} list={props.list} dispatch={props.dispatch} />
+        <PaginationItem context={props.context} content={props.content} list={props.list} />
     )
 }
 
@@ -34,7 +16,7 @@ function PaginationNext(props) {
     return '';
 
     return (
-        <PaginationItem context={props.context} content={props.content} list={props.list} dispatch={props.dispatch} />
+        <PaginationItem context={props.context} content={props.content} list={props.list} />
     )
 }
 
@@ -70,17 +52,17 @@ class Pagination extends React.Component {
         return (
             <nav>
             <ul className='pagination'>
-                <PaginationPrevious context={1} content="First" list={this.props.items} dispatch={this.props.dispatch} />
-                <PaginationPrevious context={this.getPreviousPage()} content="Previous" list={this.props.items} dispatch={this.props.dispatch} />
+                <PaginationPrevious context={1} content="First" list={this.props.items} />
+                <PaginationPrevious context={this.getPreviousPage()} content="Previous" list={this.props.items} />
                 { this.getPaginationNumbers().map(item => (
-                    <PaginationItem key={item} context={item} content={item} list={this.props.items} dispatch={this.props.dispatch} />
+                    <PaginationItem key={item} context={item} content={item} list={this.props.items} />
                 ))}
-                <PaginationNext context={this.getNextPage()} content="Next" list={this.props.items} dispatch={this.props.dispatch} />
-                <PaginationNext context={this.props.items.lastPage} content="Last" list={this.props.items} dispatch={this.props.dispatch} />
+                <PaginationNext context={this.getNextPage()} content="Next" list={this.props.items} />
+                <PaginationNext context={this.props.items.lastPage} content="Last" list={this.props.items} />
             </ul>
             </nav>
         )
     }
 }
 
-export default connect()(Pagination)
+export default Pagination

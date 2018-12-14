@@ -35,13 +35,32 @@ export const setArticlePage = (page) => ({
     }
 })
 
-export function requestArticlesAjax(articles) {
-    return function (dispatch) {
-        dispatch(requestArticles(articles));
-        axios.get('http://intranet.localhost/api/articles/'+articles.orderBy+'/'+articles.order+'?page=' + articles.page)
-            .then(function(response){
-                dispatch(receiveArticles(response))
-            })
-            .then(dispatch(invalidateArticles()));
+function canRequestArticles(state, params) {
+    if (state.articles.isLoading === true) {
+        return false;
+    }
+    if (state.articles.data.length === 0 || params.force === true) {
+        return true;
+    }
+    if (state.articles.page === params.page
+        && state.articles.orderBy === params.orderBy
+        && state.articles.order === params.order) {
+        return false
+    }
+    return true;
+}
+
+export function requestArticlesAjax(params) {
+    return function (dispatch, getState) {
+        if (canRequestArticles(getState(), params)) {
+            dispatch(requestArticles());
+            axios.get('http://intranet.localhost/api/articles/'+params.orderBy+'/'+params.order+'?page=' + params.page)
+                .then(function(response){
+                    dispatch(receiveArticles(response))
+                })
+                .then(dispatch(setArticlePage(params.page)))
+                .then(dispatch(sortArticles(params.orderBy, params.order)))
+                .then(dispatch(invalidateArticles()));
+        }
     }
 }

@@ -670,8 +670,8 @@ var createPath = function createPath(location) {
 /* unused harmony export requestArticles */
 /* unused harmony export receiveArticles */
 /* unused harmony export invalidateArticles */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return sortArticles; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return setArticlePage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return sortArticles; });
+/* unused harmony export setArticlePage */
 /* harmony export (immutable) */ __webpack_exports__["b"] = requestArticlesAjax;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
@@ -724,12 +724,27 @@ var setArticlePage = function setArticlePage(page) {
     };
 };
 
-function requestArticlesAjax(articles) {
-    return function (dispatch) {
-        dispatch(requestArticles(articles));
-        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('http://intranet.localhost/api/articles/' + articles.orderBy + '/' + articles.order + '?page=' + articles.page).then(function (response) {
-            dispatch(receiveArticles(response));
-        }).then(dispatch(invalidateArticles()));
+function canRequestArticles(state, params) {
+    if (state.articles.isLoading === true) {
+        return false;
+    }
+    if (state.articles.data.length === 0 || params.force === true) {
+        return true;
+    }
+    if (state.articles.page === params.page && state.articles.orderBy === params.orderBy && state.articles.order === params.order) {
+        return false;
+    }
+    return true;
+}
+
+function requestArticlesAjax(params) {
+    return function (dispatch, getState) {
+        if (canRequestArticles(getState(), params)) {
+            dispatch(requestArticles());
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('http://intranet.localhost/api/articles/' + params.orderBy + '/' + params.order + '?page=' + params.page).then(function (response) {
+                dispatch(receiveArticles(response));
+            }).then(dispatch(setArticlePage(params.page))).then(dispatch(sortArticles(params.orderBy, params.order))).then(dispatch(invalidateArticles()));
+        }
     };
 }
 
@@ -64340,54 +64355,105 @@ module.exports = hoistNonReactStatics;
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router_dom__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_router_dom__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(8);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 
 
-var Header = function Header() {
-    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'nav',
-        { className: 'navbar navbar-expand-md navbar-light navbar-laravel' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'div',
-            { className: 'container' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                __WEBPACK_IMPORTED_MODULE_1_react_router_dom__["b" /* Link */],
-                { className: 'navbar-brand', to: '/app' },
-                'Intranet'
-            ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'div',
-                { className: 'collapse navbar-collapse', id: 'navbarSupportedContent'
-                },
+
+
+
+var Header = function (_React$Component) {
+    _inherits(Header, _React$Component);
+
+    function Header(props) {
+        _classCallCheck(this, Header);
+
+        return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props));
+    }
+
+    _createClass(Header, [{
+        key: 'getArticles',
+        value: function getArticles(e) {
+            this.props.getArticles({
+                orderBy: this.props.articles.orderBy,
+                order: this.props.articles.order,
+                page: this.props.articles.page
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'nav',
+                { className: 'navbar navbar-expand-md navbar-light navbar-laravel' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'ul',
-                    { className: 'navbar-nav' },
+                    'div',
+                    { className: 'container' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'li',
-                        { className: 'nav-item' },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            __WEBPACK_IMPORTED_MODULE_1_react_router_dom__["b" /* Link */],
-                            { className: 'nav-link', to: '/articles' },
-                            'Articles'
-                        )
+                        __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["b" /* Link */],
+                        { className: 'navbar-brand', to: '/app' },
+                        'Intranet'
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'li',
-                        { className: 'nav-item' },
+                        'div',
+                        { className: 'collapse navbar-collapse', id: 'navbarSupportedContent'
+                        },
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            __WEBPACK_IMPORTED_MODULE_1_react_router_dom__["b" /* Link */],
-                            { className: 'nav-link', to: '/articles/add' },
-                            'Add article'
+                            'ul',
+                            { className: 'navbar-nav' },
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'li',
+                                { className: 'nav-item' },
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["b" /* Link */],
+                                    { className: 'nav-link', to: '/articles', onClick: function onClick(e) {
+                                            _this2.getArticles(e);
+                                        } },
+                                    'Articles'
+                                )
+                            ),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'li',
+                                { className: 'nav-item' },
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["b" /* Link */],
+                                    { className: 'nav-link', to: '/articles/add' },
+                                    'Add article'
+                                )
+                            )
                         )
                     )
                 )
-            )
-        )
-    );
+            );
+        }
+    }]);
+
+    return Header;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+    return state;
+};
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        getArticles: function getArticles(params) {
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__actions__["b" /* requestArticlesAjax */])(params));
+        }
+    };
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (Header);
+/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(Header));
 
 /***/ }),
 /* 105 */
@@ -65589,8 +65655,8 @@ var mapStateToProps = function mapStateToProps(state) {
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
-        getArticles: function getArticles(articles) {
-            dispatch(Object(__WEBPACK_IMPORTED_MODULE_2__actions_index__["b" /* requestArticlesAjax */])(articles));
+        getArticles: function getArticles(params) {
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_2__actions_index__["b" /* requestArticlesAjax */])(params));
         }
     };
 };
@@ -65633,27 +65699,11 @@ var articleList = function (_React$Component) {
     _createClass(articleList, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this.props.getArticles(this.props.articles);
-        }
-    }, {
-        key: 'updatePage',
-        value: function updatePage(prevProps) {
-            if (prevProps.articles.page !== this.props.articles.page) {
-                this.props.getArticles(this.props.articles);
-            }
-        }
-    }, {
-        key: 'updateSort',
-        value: function updateSort(prevProps) {
-            if (prevProps.articles.orderBy !== this.props.articles.orderBy || prevProps.articles.order !== this.props.articles.order) {
-                this.props.getArticles(this.props.articles);
-            }
-        }
-    }, {
-        key: 'componentDidUpdate',
-        value: function componentDidUpdate(prevProps) {
-            this.updatePage(prevProps);
-            this.updateSort(prevProps);
+            this.props.getArticles({
+                orderBy: this.props.articles.orderBy,
+                order: this.props.articles.order,
+                page: this.props.articles.page
+            });
         }
     }, {
         key: 'render',
@@ -65661,9 +65711,9 @@ var articleList = function (_React$Component) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 null,
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__paginator__["a" /* default */], { items: this.props.articles, update: this.props.getArticles }),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__paginator__["a" /* default */], { items: this.props.articles }),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__ItemList__["a" /* default */], { items: this.props.articles }),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__paginator__["a" /* default */], { items: this.props.articles, update: this.props.getArticles })
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__paginator__["a" /* default */], { items: this.props.articles })
             );
         }
     }]);
@@ -65698,8 +65748,7 @@ articleList.propTypes = {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PaginationItem__ = __webpack_require__(140);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -65711,39 +65760,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-
-
-function PaginationItem(props) {
-    var className = 'page-item';
-
-    if (props.list.page === props.context) {
-        className = className + ' active';
-    }
-
-    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'li',
-        { className: className },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'a',
-            { href: '#', className: 'page-link', onClick: function onClick(e) {
-                    e.preventDefault();
-                    props.dispatch(Object(__WEBPACK_IMPORTED_MODULE_2__actions__["c" /* setArticlePage */])(props.context));
-                } },
-            props.content
-        )
-    );
-}
-
 function PaginationPrevious(props) {
     if (props.list.page < 2) return '';
 
-    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(PaginationItem, { context: props.context, content: props.content, list: props.list, dispatch: props.dispatch });
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__PaginationItem__["a" /* default */], { context: props.context, content: props.content, list: props.list });
 }
 
 function PaginationNext(props) {
     if (props.list.page >= props.list.lastPage) return '';
 
-    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(PaginationItem, { context: props.context, content: props.content, list: props.list, dispatch: props.dispatch });
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__PaginationItem__["a" /* default */], { context: props.context, content: props.content, list: props.list });
 }
 
 var Pagination = function (_React$Component) {
@@ -65791,13 +65817,13 @@ var Pagination = function (_React$Component) {
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'ul',
                     { className: 'pagination' },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(PaginationPrevious, { context: 1, content: 'First', list: this.props.items, dispatch: this.props.dispatch }),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(PaginationPrevious, { context: this.getPreviousPage(), content: 'Previous', list: this.props.items, dispatch: this.props.dispatch }),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(PaginationPrevious, { context: 1, content: 'First', list: this.props.items }),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(PaginationPrevious, { context: this.getPreviousPage(), content: 'Previous', list: this.props.items }),
                     this.getPaginationNumbers().map(function (item) {
-                        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(PaginationItem, { key: item, context: item, content: item, list: _this2.props.items, dispatch: _this2.props.dispatch });
+                        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__PaginationItem__["a" /* default */], { key: item, context: item, content: item, list: _this2.props.items });
                     }),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(PaginationNext, { context: this.getNextPage(), content: 'Next', list: this.props.items, dispatch: this.props.dispatch }),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(PaginationNext, { context: this.props.items.lastPage, content: 'Last', list: this.props.items, dispatch: this.props.dispatch })
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(PaginationNext, { context: this.getNextPage(), content: 'Next', list: this.props.items }),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(PaginationNext, { context: this.props.items.lastPage, content: 'Last', list: this.props.items })
                 )
             );
         }
@@ -65806,7 +65832,7 @@ var Pagination = function (_React$Component) {
     return Pagination;
 }(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
 
-/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])()(Pagination));
+/* harmony default export */ __webpack_exports__["a"] = (Pagination);
 
 /***/ }),
 /* 128 */
@@ -65860,7 +65886,7 @@ var ItemList = function (_React$Component) {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'tr',
                         null,
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__ListHeader__["a" /* default */], { columnName: 'name', title: 'Name', items: this.props.items, sortingCallback: __WEBPACK_IMPORTED_MODULE_3__actions__["d" /* sortArticles */], sortable: true }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__ListHeader__["a" /* default */], { columnName: 'name', title: 'Name', items: this.props.items, sortingCallback: __WEBPACK_IMPORTED_MODULE_3__actions__["c" /* sortArticles */], sortable: true }),
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__ListHeader__["a" /* default */], { columnName: 'category', title: 'Category', items: this.props.items })
                     )
                 ),
@@ -65961,6 +65987,7 @@ var Loader = function Loader() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_icons_go__ = __webpack_require__(137);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_icons_go___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_icons_go__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(8);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -65968,6 +65995,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -65991,14 +66019,21 @@ var ListHeader = function (_React$Component) {
 
             var order = 'asc';
             if (column === this.props.items.orderBy) {
+                console.log(column, this.props.items.orderBy, this.props.items.order);
                 order = this.props.items.order === 'asc' ? 'desc' : 'asc';
             }
-            this.props.dispatch(this.props.sortingCallback(column, order));
+
+            var params = {
+                orderBy: column,
+                order: order,
+                page: this.props.items.page
+            };
+
+            setTimeout(this.props.getArticles(params), 100);
         }
     }, {
         key: 'renderArrow',
         value: function renderArrow() {
-            console.log(this.props.columnName, this.props.items.orderBy);
             if (this.props.items.orderBy === this.props.columnName) {
                 return this.props.items.order === 'asc' ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_icons_go__["GoChevronUp"], null) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_icons_go__["GoChevronDown"], null);
             }
@@ -66010,7 +66045,6 @@ var ListHeader = function (_React$Component) {
         value: function render() {
             var _this2 = this;
 
-            console.log(this.props.columnName);
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'th',
                 { onClick: function onClick(e) {
@@ -66027,7 +66061,22 @@ var ListHeader = function (_React$Component) {
     return ListHeader;
 }(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
 
-/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])()(ListHeader));
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        getArticles: function getArticles(params) {
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__actions__["b" /* requestArticlesAjax */])(params));
+        },
+        sortArticles: function sortArticles(column, order) {
+            dispatch(__WEBPACK_IMPORTED_MODULE_3__actions__["c" /* sortArticles */], column, order);
+        }
+    };
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+    return state;
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(ListHeader));
 
 /***/ }),
 /* 137 */
@@ -66998,6 +67047,87 @@ exports.DefaultContext = {
 };
 exports.IconContext = React.createContext && React.createContext(exports.DefaultContext);
 
+
+/***/ }),
+/* 140 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(8);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+
+var PaginationItem = function (_React$Component) {
+    _inherits(PaginationItem, _React$Component);
+
+    function PaginationItem(props) {
+        _classCallCheck(this, PaginationItem);
+
+        return _possibleConstructorReturn(this, (PaginationItem.__proto__ || Object.getPrototypeOf(PaginationItem)).call(this, props));
+    }
+
+    _createClass(PaginationItem, [{
+        key: 'getClassName',
+        value: function getClassName() {
+            var className = 'page-item';
+            if (this.props.list.page === this.props.context) {
+                className = className + ' active';
+            }
+            return className;
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var that = this;
+
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'li',
+                { className: this.getClassName() },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'a',
+                    { href: '#', className: 'page-link', onClick: function onClick(e) {
+                            e.preventDefault();
+                            console.log(that.props);
+                            that.props.getArticles({
+                                orderBy: that.props.list.orderBy,
+                                order: that.props.list.order,
+                                page: that.props.context
+                            });
+                        } },
+                    this.props.content
+                )
+            );
+        }
+    }]);
+
+    return PaginationItem;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+    return state;
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        getArticles: function getArticles(params) {
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_2__actions__["b" /* requestArticlesAjax */])(params));
+        }
+    };
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(PaginationItem));
 
 /***/ })
 /******/ ]);

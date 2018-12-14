@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { GoChevronUp, GoChevronDown } from 'react-icons/go'
+import { requestArticlesAjax, sortArticles } from '../actions'
 
 class ListHeader extends React.Component {
     constructor(props) {
@@ -14,13 +15,23 @@ class ListHeader extends React.Component {
 
         let order = 'asc';
         if (column === this.props.items.orderBy) {
+            console.log(column, this.props.items.orderBy, this.props.items.order)
             order = this.props.items.order === 'asc' ? 'desc' : 'asc'
         }
-        this.props.dispatch(this.props.sortingCallback(column, order));
+
+        let params = {
+            orderBy: column,
+            order: order,
+            page: this.props.items.page
+        }
+
+        setTimeout((
+            this.props.getArticles(params)
+        ),100)
+
     }
 
     renderArrow () {
-        console.log(this.props.columnName, this.props.items.orderBy)
         if (this.props.items.orderBy === this.props.columnName) {
             return this.props.items.order === 'asc' ? (<GoChevronUp />) : (<GoChevronDown />)
         }
@@ -29,11 +40,24 @@ class ListHeader extends React.Component {
     }
 
     render () {
-        console.log(this.props.columnName)
         return (
             <th onClick={e => this.sortBy(this.props.columnName)}>{this.props.title}  {this.renderArrow()} </th>
         )
     }
 }
 
-export default connect()(ListHeader)
+const mapDispatchToProps = dispatch => {
+    return {
+        getArticles: (params) => { dispatch(requestArticlesAjax(params)) },
+        sortArticles: (column, order) => { dispatch(sortArticles, column, order) }
+    }
+}
+
+const mapStateToProps = state => {
+    return state
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ListHeader)

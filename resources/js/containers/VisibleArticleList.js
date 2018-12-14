@@ -11,7 +11,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    getArticles: (articles) => {dispatch(requestArticlesAjax(articles))}
+    getArticles: (params) => {dispatch(requestArticlesAjax(params))}
 })
 
 export default connect (

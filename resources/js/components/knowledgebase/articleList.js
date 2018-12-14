@@ -10,32 +10,19 @@ class articleList extends React.Component {
     }
 
     componentDidMount() {
-        this.props.getArticles(this.props.articles);
-    }
-
-    updatePage (prevProps) {
-        if (prevProps.articles.page !== this.props.articles.page) {
-            this.props.getArticles(this.props.articles)
-        }
-    }
-
-    updateSort(prevProps) {
-        if (prevProps.articles.orderBy !== this.props.articles.orderBy || prevProps.articles.order !== this.props.articles.order) {
-            this.props.getArticles(this.props.articles)
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        this.updatePage(prevProps)
-        this.updateSort(prevProps)
+        this.props.getArticles({
+            orderBy: this.props.articles.orderBy,
+            order: this.props.articles.order,
+            page: this.props.articles.page
+        })
     }
 
     render() {
         return (
             <div>
-                <Pagination items={this.props.articles} update={this.props.getArticles} />
+                <Pagination items={this.props.articles} />
                 <ItemList items={this.props.articles} />
-                <Pagination items={this.props.articles} update={this.props.getArticles} />
+                <Pagination items={this.props.articles} />
             </div>
         )
     }
