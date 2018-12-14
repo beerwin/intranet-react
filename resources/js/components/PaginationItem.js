@@ -17,18 +17,15 @@ class PaginationItem extends React.Component {
     }
 
     render() {
-        let that = this
-
         return (
             <li className={this.getClassName()}>
                 <a href="#" className='page-link' onClick={e => {
                     e.preventDefault()
-                    console.log(that.props);
-                    that.props.getArticles(
+                    this.props.getArticles(
                         {
-                            orderBy: that.props.list.orderBy,
-                            order: that.props.list.order,
-                            page: that.props.context
+                            orderBy: this.props.list.orderBy,
+                            order: this.props.list.order,
+                            page: this.props.context
                         }
                     )
                 }}>{this.props.content}</a>
