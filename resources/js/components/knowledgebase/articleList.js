@@ -28,7 +28,7 @@ class ArticleList extends React.Component {
     }
 }
 
-articleList.propTypes = {
+ArticleList.propTypes = {
     articles: PropTypes.shape({
         isLoading: PropTypes.boolean,
         page: PropTypes.number,

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import articleList from '../components/knowledgebase/articleList'
+import ArticleList from '../components/knowledgebase/ArticleList'
 import { requestArticlesAjax } from '../actions/index'
 
 const getVisibleArticles = (articles) => {
@@ -17,4 +17,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect (
     mapStateToProps,
     mapDispatchToProps
-)(articleList)
+)(ArticleList)

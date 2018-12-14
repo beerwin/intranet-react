@@ -1,5 +1,5 @@
 import React from 'react'
-import Article from './article'
+import Article from './Article'
 import Loader from '../Loader'
 import {sortArticles} from '../../actions'
 import ListHeader from '../ListHeader'
