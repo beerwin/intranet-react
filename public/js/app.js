@@ -65973,16 +65973,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var ItemList = function (_React$Component) {
-    _inherits(ItemList, _React$Component);
+var ListHeader = function (_React$Component) {
+    _inherits(ListHeader, _React$Component);
 
-    function ItemList(props) {
-        _classCallCheck(this, ItemList);
+    function ListHeader(props) {
+        _classCallCheck(this, ListHeader);
 
-        return _possibleConstructorReturn(this, (ItemList.__proto__ || Object.getPrototypeOf(ItemList)).call(this, props));
+        return _possibleConstructorReturn(this, (ListHeader.__proto__ || Object.getPrototypeOf(ListHeader)).call(this, props));
     }
 
-    _createClass(ItemList, [{
+    _createClass(ListHeader, [{
         key: 'sortBy',
         value: function sortBy(column) {
             if (!this.props.sortable) {
@@ -66024,10 +66024,10 @@ var ItemList = function (_React$Component) {
         }
     }]);
 
-    return ItemList;
+    return ListHeader;
 }(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
 
-/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])()(ItemList));
+/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])()(ListHeader));
 
 /***/ }),
 /* 137 */

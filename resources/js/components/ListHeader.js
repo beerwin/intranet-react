@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { GoChevronUp, GoChevronDown } from 'react-icons/go'
 
-class ItemList extends React.Component {
+class ListHeader extends React.Component {
     constructor(props) {
         super(props)
     }
@@ -36,4 +36,4 @@ class ItemList extends React.Component {
     }
 }
 
-export default connect()(ItemList)
+export default connect()(ListHeader)
