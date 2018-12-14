@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import articleList from '../components/articleList'
+import articleList from '../components/knowledgebase/articleList'
 import { requestArticlesAjax } from '../actions/index'
 
 const getVisibleArticles = (articles) => {

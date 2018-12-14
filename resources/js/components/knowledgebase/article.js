@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const Article = ({name, slug, content, category}) => (
-    <li>
-        {name}
-    </li>
+    <tr>
+        <td>{name}</td>
+        <td>{category}</td>
+    </tr>
 )
 
 Article.propTypes = {

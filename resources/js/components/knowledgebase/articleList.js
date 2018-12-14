@@ -1,20 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Article from './article'
-import Loader from './loader'
-import Pagination from './paginator'
+import Pagination from '../paginator'
+import ItemList from './ItemList'
 
-function ItemList (props) {
-    if (props.items.isLoading) {
-        return <Loader />
-    }
-
-    return (<ul>
-        {props.items.data.map(item => (
-            <Article key={item.slug} {...item} />
-        ))}
-    </ul>)
-}
 
 class articleList extends React.Component {
     constructor (props) {
@@ -25,10 +13,21 @@ class articleList extends React.Component {
         this.props.getArticles(this.props.articles);
     }
 
-    componentDidUpdate(prevProps) {
+    updatePage (prevProps) {
         if (prevProps.articles.page !== this.props.articles.page) {
             this.props.getArticles(this.props.articles)
         }
+    }
+
+    updateSort(prevProps) {
+        if (prevProps.articles.orderBy !== this.props.articles.orderBy || prevProps.articles.order !== this.props.articles.order) {
+            this.props.getArticles(this.props.articles)
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        this.updatePage(prevProps)
+        this.updateSort(prevProps)
     }
 
     render() {
