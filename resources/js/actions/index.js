@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {API_URL} from './config'
 
 export const addArticle = article => ({
     type: 'ADD_ARTICLE',
@@ -35,6 +36,21 @@ export const setArticlePage = (page) => ({
     }
 })
 
+export const requestArticle = () => ({
+    type: 'REQUEST_ARTICLE',
+    payLoad: []
+})
+
+export const receiveArticle = json => ({
+    type: 'RECEIVE_ARTICLE',
+    payLoad: json
+})
+
+export const invalidateArticle = () => ({
+    type: 'INVALIDATE_ARTICLE',
+    payLoad: []
+})
+
 function canRequestArticles(state, params) {
     if (state.articles.isLoading === true) {
         return false;
@@ -54,7 +70,7 @@ export function requestArticlesAjax(params) {
     return function (dispatch, getState) {
         if (canRequestArticles(getState(), params)) {
             dispatch(requestArticles());
-            axios.get('http://intranet.localhost/api/articles/'+params.orderBy+'/'+params.order+'?page=' + params.page)
+            axios.get(API_URL + '/articles/'+params.orderBy+'/'+params.order+'?page=' + params.page)
                 .then(function(response){
                     dispatch(receiveArticles(response))
                 })
@@ -62,5 +78,14 @@ export function requestArticlesAjax(params) {
                 .then(dispatch(sortArticles(params.orderBy, params.order)))
                 .then(dispatch(invalidateArticles()));
         }
+    }
+}
+
+export function requestSingleArticle(params) {
+    return function (dispatch, getState) {
+        dispatch(requestArticle());
+        axios.get(API_URL + '/articles/' + params).then(function(response){
+            dispatch(receiveArticle(response));
+        }).then(dispatch(invalidateArticle()))
     }
 }

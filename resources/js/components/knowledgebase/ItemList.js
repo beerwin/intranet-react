@@ -20,6 +20,7 @@ class ItemList extends React.Component {
                 <tr>
                     <ListHeader columnName='name' title='Name' items={this.props.items} sortingCallback={sortArticles} sortable />
                     <ListHeader columnName='category' title='Category' items={this.props.items} />
+                    <ListHeader columnName='read' title='Read' items={this.props.items} />
                 </tr>
             </thead>
             <tbody>

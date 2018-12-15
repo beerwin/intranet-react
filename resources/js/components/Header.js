@@ -25,10 +25,10 @@ class Header extends React.Component {
     >
                     <ul className='navbar-nav'>
                         <li className='nav-item'>
-                            <Link className='nav-link' to="/articles" onClick={e => {this.getArticles(e)}}>Articles</Link>
+                            <Link className='nav-link' to="/app/articles" onClick={e => {this.getArticles(e)}}>Articles</Link>
                         </li>
                         <li className='nav-item'>
-                            <Link className='nav-link' to="/articles/add">Add article</Link>
+                            <Link className='nav-link' to="/app/articles/add">Add article</Link>
                         </li>
                     </ul>
                 </div>

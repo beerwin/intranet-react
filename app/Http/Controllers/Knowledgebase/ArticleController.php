@@ -34,4 +34,9 @@ class ArticleController extends Controller
 
         return response()->json(null, 204);
     }
+
+    public function read($slug) {
+        $article = Article::where('slug', $slug)->with('Category')->first();
+        return response()->json($article, 200);
+    }
 }

@@ -8,8 +8,9 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import { rootReducer } from './reducers/index'
 import AddArticle from '../containers/AddArticle'
-import VisibleArticleList from '../containers/VisibleArticleList';
-import axios from 'axios';
+import VisibleArticleList from '../containers/VisibleArticleList'
+import ArticlePage from './knowledgebase/ArticlePage'
+import axios from 'axios'
 
 class App extends Component {
     render() {
@@ -20,8 +21,9 @@ class App extends Component {
                     <main className='py-4'>
                         <div className='container'>
                             <Switch>
-                                <Route exact path="/articles" component={VisibleArticleList} />
-                                <Route exact path="/articles/add" component={AddArticle} />
+                                <Route exact path="/app/articles" component={VisibleArticleList} />
+                                <Route exact path="/app/articles/add" component={AddArticle} />
+                                <Route path="/app/articles/:slug" component={ArticlePage} />
                             </Switch>
                         </div>
                     </main>

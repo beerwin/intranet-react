@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::get('articles', 'Knowledgebase\ArticleController@index')->middleware('auth:api');
+Route::get('articles/{slug}', 'Knowledgebase\ArticleController@read')->middleware('auth:api');
 Route::get('articles/{orderBy}/{order}', 'Knowledgebase\ArticleController@index')->middleware('auth:api');
 Route::get('articles/{article}', 'Knowledgebase\ArticleController@show')->middleware('auth:api');
 Route::post('articles', 'Knowledgebase\ArticleController@store')->middleware('auth:api');

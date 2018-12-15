@@ -15,7 +15,6 @@ class ListHeader extends React.Component {
 
         let order = 'asc';
         if (column === this.props.items.orderBy) {
-            console.log(column, this.props.items.orderBy, this.props.items.order)
             order = this.props.items.order === 'asc' ? 'desc' : 'asc'
         }
 
