@@ -16,6 +16,7 @@ action) => {
         return Object.assign({}, state, {isLoading: true})
         case 'RECEIVE_ARTICLE':
         return Object.assign({}, state, {
+            isLoading: false,
             article: {
                 name: action.payLoad.data.name,
                 slug: action.payLoad.data.slug,
@@ -27,7 +28,7 @@ action) => {
             }
         })
         case 'INVALIDATE_ARTICLE':
-        return Object.assign({}, state, {isLoading: false});
+        return state
         default:
         return state
     }

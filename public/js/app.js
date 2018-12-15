@@ -693,6 +693,19 @@ function canRequestArticles(state, params) {
     return true;
 }
 
+function canRequestArticle(state, params) {
+    if (state.articlePage.isLoading) {
+        return false;
+    }
+    if (state.articlePage.article.slug === '') {
+        return true;
+    }
+    if (state.articlePage.slug === params) {
+        return false;
+    }
+    return true;
+}
+
 function requestArticlesAjax(params) {
     return function (dispatch, getState) {
         if (canRequestArticles(getState(), params)) {
@@ -706,10 +719,12 @@ function requestArticlesAjax(params) {
 
 function requestSingleArticle(params) {
     return function (dispatch, getState) {
-        dispatch(requestArticle());
-        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(__WEBPACK_IMPORTED_MODULE_1__config__["a" /* API_URL */] + '/articles/' + params).then(function (response) {
-            dispatch(receiveArticle(response));
-        }).then(dispatch(invalidateArticle()));
+        if (canRequestArticle(getState(), params)) {
+            dispatch(requestArticle());
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(__WEBPACK_IMPORTED_MODULE_1__config__["a" /* API_URL */] + '/articles/' + params).then(function (response) {
+                dispatch(receiveArticle(response));
+            }).then(dispatch(invalidateArticle()));
+        }
     };
 }
 
@@ -67265,6 +67280,11 @@ var ArticlePage = function (_React$Component) {
     }
 
     _createClass(ArticlePage, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.props.getArticle(this.props.match.params.slug);
+        }
+    }, {
         key: 'render',
         value: function render() {
             if (!this.props.articlePage.article) {
@@ -67328,7 +67348,7 @@ var mapStateToProps = function mapStateToProps(state) {
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
         getArticle: function getArticle(params) {
-            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__actions__["b" /* requestArticle */])(params));
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__actions__["d" /* requestSingleArticle */])(params));
         }
     };
 };
@@ -67368,6 +67388,7 @@ var articlePage = function articlePage() {
             return Object.assign({}, state, { isLoading: true });
         case 'RECEIVE_ARTICLE':
             return Object.assign({}, state, {
+                isLoading: false,
                 article: {
                     name: action.payLoad.data.name,
                     slug: action.payLoad.data.slug,
@@ -67379,7 +67400,7 @@ var articlePage = function articlePage() {
                 }
             });
         case 'INVALIDATE_ARTICLE':
-            return Object.assign({}, state, { isLoading: false });
+            return state;
         default:
             return state;
     }

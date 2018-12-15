@@ -53,10 +53,10 @@ export const invalidateArticle = () => ({
 
 function canRequestArticles(state, params) {
     if (state.articles.isLoading === true) {
-        return false;
+        return false
     }
     if (state.articles.data.length === 0 || params.force === true) {
-        return true;
+        return true
     }
     if (state.articles.page === params.page
         && state.articles.orderBy === params.orderBy
@@ -64,6 +64,19 @@ function canRequestArticles(state, params) {
         return false
     }
     return true;
+}
+
+function canRequestArticle(state, params) {
+    if (state.articlePage.isLoading) {
+        return false
+    }
+    if (state.articlePage.article.slug === '') {
+        return true
+    }
+    if (state.articlePage.slug === params) {
+        return false
+    }
+    return true
 }
 
 export function requestArticlesAjax(params) {
@@ -83,9 +96,13 @@ export function requestArticlesAjax(params) {
 
 export function requestSingleArticle(params) {
     return function (dispatch, getState) {
-        dispatch(requestArticle());
-        axios.get(API_URL + '/articles/' + params).then(function(response){
-            dispatch(receiveArticle(response));
-        }).then(dispatch(invalidateArticle()))
+        if (canRequestArticle(getState(), params)) {
+            dispatch(requestArticle());
+            axios.get(API_URL + '/articles/' + params)
+            .then(function(response){
+                dispatch(receiveArticle(response));
+            })
+            .then(dispatch(invalidateArticle()))
+        }
     }
 }

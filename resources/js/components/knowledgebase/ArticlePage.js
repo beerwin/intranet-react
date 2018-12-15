@@ -1,12 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { requestArticle } from '../../actions'
+import { requestSingleArticle } from '../../actions'
 import Loader from '../Loader'
 
 class ArticlePage extends React.Component {
     constructor (props) {
         super (props)
+    }
+
+    componentDidMount() {
+        this.props.getArticle(this.props.match.params.slug);
     }
 
     render () {
@@ -52,7 +56,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    getArticle: (params) => {dispatch(requestArticle(params))}
+    getArticle: (params) => {dispatch(requestSingleArticle(params))}
 })
 
 export default connect(
